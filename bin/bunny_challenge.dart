@@ -122,17 +122,17 @@ class BunnyChallenge {
   /// After each pick it should call the [bunnyMovement] function.
   _bunnyOnSameIndex({bool isFirst = false, int currentIndex = 2, bool reachedEnd = false}) {
     iterations++;
-    print(isFirst);
-    print(currentIndex);
+    print('currentIndex: $currentIndex');
     if (rabbithole[currentIndex].contains('R')) {
       print('Bunny Caught!');
       print('Made $iterations iterations on an array with the length of: ${rabbithole.length}');
       exit(0);
     } else if (!isFirst && rabbithole[currentIndex].contains('_')) {
-      if (rabbithole[currentIndex] == rabbithole.length - 2) {
+      if (currentIndex == rabbithole.length - 2) {
         _bunnyMovement();
         _bunnyOnSameIndex(isFirst: true, currentIndex: currentIndex - 1, reachedEnd: true);
-      } else if (rabbithole[currentIndex] == 0) {
+      }
+      if (currentIndex == 0) {
         _bunnyMovement();
         _bunnyOnSameIndex(isFirst: true, currentIndex: currentIndex + 1, reachedEnd: false);
       } else if (!reachedEnd) {
@@ -143,15 +143,15 @@ class BunnyChallenge {
         _bunnyOnSameIndex(isFirst: true, currentIndex: currentIndex - 1, reachedEnd: reachedEnd);
       }
     } else if (isFirst) {
-      print('yes');
       if (currentIndex % 2 == 0) {
         _bunnyMovement();
         _bunnyOnSameIndex(isFirst: false, currentIndex: currentIndex, reachedEnd: reachedEnd);
       } else {
-        if (rabbithole[currentIndex] == rabbithole.length - 2) {
+        if (currentIndex == rabbithole.length - 2) {
           _bunnyMovement();
-          _bunnyOnSameIndex(isFirst: true, currentIndex: currentIndex - 2, reachedEnd: true);
-        } else if (rabbithole[currentIndex] == 0) {
+          _bunnyOnSameIndex(isFirst: true, currentIndex: currentIndex - 1, reachedEnd: true);
+        }
+        if (currentIndex == 0) {
           _bunnyMovement();
           _bunnyOnSameIndex(isFirst: true, currentIndex: currentIndex + 1, reachedEnd: false);
         } else if (!reachedEnd) {
@@ -159,11 +159,10 @@ class BunnyChallenge {
           _bunnyOnSameIndex(isFirst: true, currentIndex: currentIndex + 1, reachedEnd: reachedEnd);
         } else {
           _bunnyMovement();
-          _bunnyOnSameIndex(isFirst: true, currentIndex: currentIndex - 2, reachedEnd: reachedEnd);
+          _bunnyOnSameIndex(isFirst: true, currentIndex: currentIndex - 1, reachedEnd: reachedEnd);
         }
       }
     }
-    print('Something went dramaticaly wrong');
   }
 
   void bunnyPicker() {
