@@ -2,17 +2,99 @@ import 'dart:io';
 import 'dart:math';
 
 void main(List<String> arguments) {
-  BunnyChallenge(['_', '_', '_', '_', 'R', '_', '_', '_', '_', '_']).bunnyLoop();
+  BunnyChallenge([
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    'R',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_',
+    '_'
+  ]).bunnyPicker();
 }
 
 class BunnyChallenge {
-  const BunnyChallenge(this.rabbithole);
+  BunnyChallenge(this.rabbithole);
 
   final List<String> rabbithole;
+  int iterations = 0;
 
   /// Moves the bunny randomly one position to the right or left in the array.
   /// Will move the bunny to the other direction if the min or max of the List is reached
-  void bunnyMovement() {
+  void _bunnyMovement() {
     final random = Random();
     final bunnyMovement = random.nextInt(2);
     final currentBunnyPosition = rabbithole.indexOf('R');
@@ -35,32 +117,56 @@ class BunnyChallenge {
     }
   }
 
-  /// Picks up randomly one index in the given array to check if the bunny is on the same index.
-  bool bunnyOnSameIndex() {
-    final random = Random();
-    final bunnyIndex = random.nextInt(rabbithole.length);
-    print('Try to pick bunny at: $bunnyIndex');
-    print('Currentlist: ${rabbithole.toString()}');
-    return rabbithole[bunnyIndex] == 'R';
-  }
-
-  /// Checks if [bunnyOnSameIndex] returns true and if so, the bunny is caught.
-  /// If not, the bunny is not caught.
-  /// If the bunny is caught the programm will exit.
-  /// If the bunny is not caught the programm will continue with the next bunnyMovement and then repeat.
-  void bunnyCaught() {
-    if (bunnyOnSameIndex()) {
-      print('Bunny caught!');
+  /// The function should start at index 2 and pick this index two times.
+  /// The function should pick each even index two times and pick each odd index one time.
+  /// After each pick it should call the [bunnyMovement] function.
+  _bunnyOnSameIndex({bool isFirst = false, int currentIndex = 2, bool reachedEnd = false}) {
+    iterations++;
+    print(isFirst);
+    print(currentIndex);
+    if (rabbithole[currentIndex].contains('R')) {
+      print('Bunny Caught!');
+      print('Made $iterations iterations on an array with the length of: ${rabbithole.length}');
       exit(0);
-    } else {
-      bunnyMovement();
+    } else if (!isFirst && rabbithole[currentIndex].contains('_')) {
+      if (rabbithole[currentIndex] == rabbithole.length - 2) {
+        _bunnyMovement();
+        _bunnyOnSameIndex(isFirst: true, currentIndex: currentIndex - 1, reachedEnd: true);
+      } else if (rabbithole[currentIndex] == 0) {
+        _bunnyMovement();
+        _bunnyOnSameIndex(isFirst: true, currentIndex: currentIndex + 1, reachedEnd: false);
+      } else if (!reachedEnd) {
+        _bunnyMovement();
+        _bunnyOnSameIndex(isFirst: true, currentIndex: currentIndex + 1, reachedEnd: reachedEnd);
+      } else {
+        _bunnyMovement();
+        _bunnyOnSameIndex(isFirst: true, currentIndex: currentIndex - 1, reachedEnd: reachedEnd);
+      }
+    } else if (isFirst) {
+      print('yes');
+      if (currentIndex % 2 == 0) {
+        _bunnyMovement();
+        _bunnyOnSameIndex(isFirst: false, currentIndex: currentIndex, reachedEnd: reachedEnd);
+      } else {
+        if (rabbithole[currentIndex] == rabbithole.length - 2) {
+          _bunnyMovement();
+          _bunnyOnSameIndex(isFirst: true, currentIndex: currentIndex - 2, reachedEnd: true);
+        } else if (rabbithole[currentIndex] == 0) {
+          _bunnyMovement();
+          _bunnyOnSameIndex(isFirst: true, currentIndex: currentIndex + 1, reachedEnd: false);
+        } else if (!reachedEnd) {
+          _bunnyMovement();
+          _bunnyOnSameIndex(isFirst: true, currentIndex: currentIndex + 1, reachedEnd: reachedEnd);
+        } else {
+          _bunnyMovement();
+          _bunnyOnSameIndex(isFirst: true, currentIndex: currentIndex - 2, reachedEnd: reachedEnd);
+        }
+      }
     }
+    print('Something went dramaticaly wrong');
   }
 
-  /// The main loop of the programm.
-  void bunnyLoop() {
-    while (true) {
-      bunnyCaught();
-    }
+  void bunnyPicker() {
+    _bunnyOnSameIndex(isFirst: true);
   }
 }
